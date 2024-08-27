@@ -54,8 +54,19 @@ The dataset contains information on Nigeria's agricultural exports, including de
 
 ## **ANALYSIS**
 **1 Frequency of Exports**
-- To determine how frequently each product is exported, you can count the number of times each product appears in the dataset.
-                                                   *#ANALYSIS*
+- To determine how frequently each product is exported
+```
+SELECT
+    Product_Name,
+    COUNT(*) AS Export_Frequency
+FROM
+    nigeria_agricultural_export
+GROUP BY
+    Product_Name
+ORDER BY
+    Export_Frequency DESC;
+
+```
 
 
 
