@@ -1,5 +1,6 @@
 # NIGERIA-AGRICULTURAL-EXPORT(2021-2023)
 ![](export.jpg)
+---
 
 ### Project Overview : Analysing The Nigerian Agricultural Export (2021-2023)
 
@@ -52,30 +53,44 @@ The dataset contains information on Nigeria's agricultural exports, including de
 - Number of Entries: 1,000 rows
 - Number of Columns: 10
 
-## **ANALYSIS**
-**1 Frequency of Exports**
+## **ANALYSIS ON EXPORT PATTERNS** 
+**1. Frequency of Exports**
 - To determine how frequently each product is exported
 ```
 SELECT
-    Product_Name,
-    COUNT(*) AS Export_Frequency
-FROM
-    nigeria_agricultural_export
-GROUP BY
-    Product_Name
-ORDER BY
-    Export_Frequency DESC;
+    Product_Name,COUNT(*) AS Export_Frequency
+FROM nigeria_agricultural_export
+GROUP BY Product_Name
+ORDER BY Export_Frequency DESC;
 
 ```
+---
+![](Export_freq.png)
+---
 
+**2. Volume of Exports by Country**
+- Identifying the top 10 product-country pairs with the highest export volumes in terms of units sold.
 
+```
+SELECT Product_name, `Export Country`, SUM(`Units Sold`) as Total_units
+FROM credit.nigeria_agricultural_exports
+GROUP BY `Export Country`,Product_name
+ORDER BY total_units DESC;
+```
+---
+![](TOP_10.png)
+---
 
-
-
-
-
-
-
+**3. Volume of Exports by Country**
+```
+SELECT Product_Name, ROUND(SUM(Profit),2) as Total_profit
+FROM credit.nigeria_agricultural_exports
+GROUP BY Product_Name
+ORDER BY total_profit DESC;
+```
+---
+![](PROFITs.png)
+---
 
 
 
