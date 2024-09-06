@@ -75,22 +75,14 @@ ORDER BY Export_Frequency DESC;
 SELECT Product_name, `Export Country`, SUM(`Units Sold`) as Total_units
 FROM credit.nigeria_agricultural_exports
 GROUP BY `Export Country`,Product_name
-ORDER BY total_units DESC;
+ORDER BY total_units DESC
+LIMIT 10;
 ```
 ---
 ![](TOP_10.png)
 ---
 
-**3. Volume of Exports by Country**
-```
-SELECT Product_Name, ROUND(SUM(Profit),2) as Total_profit
-FROM credit.nigeria_agricultural_exports
-GROUP BY Product_Name
-ORDER BY total_profit DESC;
-```
----
-![](PROFITs.png)
----
+
 
 
 
