@@ -81,7 +81,21 @@ LIMIT 10;
 ---
 ![](TOP_10.png)
 ---
-
+**3.Annual Financial Performance**
+- Assessing the yearly financial performance of Nigeria's agricultural exports, including total export value, COGS, profit, and profit margin.
+```
+SELECT YEAR(Date) AS Year, 
+  SUM(`Export Value`) AS Total_Export_Value,
+  SUM(COGS) AS TotalCOGS,
+  SUM(`Export Value` - COGS) AS Profit,
+  (SUM(`Export Value` - COGS) / SUM(`Export Value`)) * 100 AS ProfitMargin
+FROM credit.nigeria_agricultural_exports
+GROUP BY YEAR(Date)
+ORDER BY Year;
+```
+---
+![](Annual.png)
+---
 
 
 
