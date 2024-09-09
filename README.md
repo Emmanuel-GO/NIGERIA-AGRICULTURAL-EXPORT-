@@ -81,7 +81,36 @@ LIMIT 10;
 ---
 ![](TOP_10.png)
 ---
-**3.Annual Financial Performance**
+
+**3 Most Exported Product**
+- To Determine the Most Frequent product exported including their export Value
+```
+SELECT Product_Name, 
+       SUM(`Export Value`) AS Total_Export_Value
+FROM credit.nigeria_agricultural_exports
+GROUP BY Product_Name
+ORDER BY Total_Export_Value DESC;
+
+```
+---
+![](Mostexported.png)
+---
+**4. Major Export Destinations**
+-Identify the top 10 countries with the highest total export values from Nigeria
+```
+SELECT `Export Country`, 
+       SUM(`Export Value`) AS Total_Export_Value
+FROM credit.nigeria_agricultural_exports
+GROUP BY `Export Country`
+ORDER BY Total_Export_Value DESC
+LIMIT 10;  -- Top 10 export destinations
+```
+---
+![](Countries.png)
+---
+
+
+**5.Annual Financial Performance**
 - Assessing the yearly financial performance of Nigeria's agricultural exports, including total export value, COGS, profit, and profit margin.
 ```
 SELECT YEAR(Date) AS Year, 
@@ -96,10 +125,6 @@ ORDER BY Year;
 ---
 ![](Annual.png)
 ---
-
-
-
-
 
 
 
