@@ -27,6 +27,7 @@ This project focuses on analyzing Nigeria's agricultural exports, utilizing a da
 
 ## Tool
 - MySQL
+- Power BI
   
 ## Data Source
 - Data-World
@@ -110,30 +111,50 @@ LIMIT 10;  -- Top 10 export destinations
 **5.Annual Financial Performance**
 - Assessing the yearly financial performance of Nigeria's agricultural exports, including total export value, COGS, profit, and profit margin.
 ```
-SELECT YEAR(Date) AS Year, 
-  SUM(`Export Value`) AS Total_Export_Value,
-  SUM(COGS) AS TotalCOGS,
-  SUM(`Export Value` - COGS) AS Profit,
-  (SUM(`Export Value` - COGS) / SUM(`Export Value`)) * 100 AS ProfitMargin
-FROM credit.nigeria_agricultural_exports
-GROUP BY YEAR(Date)
-ORDER BY Year;
+SELECT 
+    YearlyData.Year,
+    ROUND(SUM(YearlyData.Total_Export_Value), 2) AS Total_Export_Value,
+    ROUND(SUM(YearlyData.Total_COGS), 2) AS Total_COGS,
+    ROUND(SUM(YearlyData.Profit), 2) AS Profit,
+    ROUND(
+        (SUM(YearlyData.Profit) / NULLIF(SUM(YearlyData.Total_Export_Value), 0)) * 100,
+        2
+    ) AS Profit_Margin_Percentage
+FROM (
+    SELECT 
+        YEAR(Date) AS Year,
+        SUM(`Export Value`) AS Total_Export_Value,
+        SUM(COGS) AS Total_COGS,
+        SUM(`Export Value` - COGS) AS Profit
+    FROM credit.nigeria_agricultural_exports
+    GROUP BY YEAR(Date)
+) AS YearlyData
+GROUP BY YearlyData.Year
+
 ```
 ---
-![](Annual.png)
+![](Annuall.png)
 ---
 
 **6. Export Performance**
 - Analyzing export trends and performance on a Monthly Basis
 ```
-SELECT Product_Name,
-       YEAR(Date) AS Year,
-       MONTH(Date) AS Month,
-       MONTHNAME(Date) AS Month_Name,
-       ROUND(SUM(`Export Value`), 2) AS Total_Export_Value
+SELECT 
+    Product_Name,
+    YEAR(Date) AS Year,
+    MONTH(Date) AS Month,
+    MONTHNAME(Date) AS Month_Name,
+    ROUND(SUM(`Export Value`), 2) AS Total_Export_Value
 FROM credit.nigeria_agricultural_exports
-GROUP BY Product_Name, Year, Month, Month_Name
-ORDER BY Product_Name, Year, Month;
+GROUP BY 
+    Product_Name, 
+    YEAR(Date), 
+    MONTH(Date), 
+    MONTHNAME(Date)
+ORDER BY 
+    Product_Name, 
+    Year, 
+    Month;
 ```
 ---
 ![](Perfomance_sale.png)
@@ -142,10 +163,23 @@ ORDER BY Product_Name, Year, Month;
 **7. Company Performance Analysis**
 - Determining the total export value contributed by each company
 ```
-SELECT Company,
-       ROUND(SUM(`Export Value`), 2) AS Total_Export_Value
-FROM credit.nigeria_agricultural_exports
-GROUP BY Company
+WITH AggregatedExportValues AS (
+    SELECT 
+        Company,
+        ROUND(SUM(`Export Value`), 2) AS Total_Export_Value
+    FROM credit.nigeria_agricultural_exports
+    GROUP BY Company
+),
+FormattedExportValues AS (
+    SELECT
+        Company,
+        Total_Export_Value
+    FROM AggregatedExportValues
+)
+SELECT
+    Company,
+    Total_Export_Value
+FROM FormattedExportValues
 ORDER BY Total_Export_Value DESC;
 ```
 ---
@@ -154,18 +188,68 @@ ORDER BY Total_Export_Value DESC;
 
 - Rank of Companies Based on Profitabilty
 ```
-SELECT Company,
-       ROUND(SUM(`Export Value`), 2) AS Total_Export_Value,
-       ROUND(SUM(`Export Value`) - SUM(COGS), 2) AS Total_Profit
-FROM credit.nigeria_agricultural_exports
-GROUP BY Company
+WITH CompanyExportData AS (
+    SELECT 
+        Company,
+        ROUND(SUM(`Export Value`), 2) AS Total_Export_Value,
+        ROUND(SUM(COGS), 2) AS Total_COGS
+    FROM credit.nigeria_agricultural_exports
+    GROUP BY Company
+),
+CompanyProfitData AS (
+    SELECT
+        Company,
+        Total_Export_Value,
+        Total_COGS,
+        ROUND(Total_Export_Value - Total_COGS, 2) AS Total_Profit
+    FROM CompanyExportData
+)
+SELECT
+    Company,
+    Total_Export_Value,
+    Total_Profit
+FROM CompanyProfitData
 ORDER BY Total_Profit DESC;
 ```
 ---
 ![](TOPCOM.png)
 ---
-
-
+- Compare the performance of companies involved in agricultural exports on a monthly basis, focusing on their total export value and profitability.
+```
+WITH ExportData AS (
+    SELECT 
+        Company,
+        YEAR(Date) AS Year,
+        MONTH(Date) AS Numeric_Month,
+        MONTHNAME(Date) AS Month_Name,
+        ROUND(SUM(`Export Value`), 2) AS Total_Export_Value,
+        ROUND(SUM(COGS), 2) AS Total_COGS
+    FROM credit.nigeria_agricultural_exports
+    GROUP BY Company, YEAR(Date), MONTH(Date)
+),
+ProfitData AS (
+    SELECT
+        Company,
+        Year,
+        Numeric_Month AS Month,
+        Month_Name,
+        Total_Export_Value,
+        ROUND(Total_Export_Value - Total_COGS, 2) AS Total_Profit
+    FROM ExportData
+)
+SELECT
+    Company,
+    Year,
+    Month,
+    Month_Name,
+    Total_Export_Value,
+    Total_Profit
+FROM ProfitData
+ORDER BY Company, Year, Month;
+```
+---
+![](CPT.png)
+---
 
 
 
