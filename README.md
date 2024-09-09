@@ -139,11 +139,31 @@ ORDER BY Product_Name, Year, Month;
 ![](Perfomance_sale.png)
 ---
 
+**7. Company Performance Analysis**
+- Determining the total export value contributed by each company
+```
+SELECT Company,
+       ROUND(SUM(`Export Value`), 2) AS Total_Export_Value
+FROM credit.nigeria_agricultural_exports
+GROUP BY Company
+ORDER BY Total_Export_Value DESC;
+```
+---
+![](c_contribution.png)
+---
 
-
-
-
-
+- Rank of Companies Based on Profitabilty
+```
+SELECT Company,
+       ROUND(SUM(`Export Value`), 2) AS Total_Export_Value,
+       ROUND(SUM(`Export Value`) - SUM(COGS), 2) AS Total_Profit
+FROM credit.nigeria_agricultural_exports
+GROUP BY Company
+ORDER BY Total_Profit DESC;
+```
+---
+![](TOPCOM.png)
+---
 
 
 
