@@ -51,6 +51,8 @@ The dataset contains information on Nigeria's agricultural exports, including de
 - Number of Entries: 1,000 rows
 - Number of Columns: 10
 
+## Data Modelling
+
 ## **ANALYSIS ON EXPORT PATTERNS** 
 **1. Frequency of Exports**
 - To determine how frequently each product is exported
@@ -251,6 +253,7 @@ ORDER BY Company, Year, Month;
 ![](CPT.png)
 ---
 
+## FINDINGS AND RECOMMENDATION 
 
 
 
