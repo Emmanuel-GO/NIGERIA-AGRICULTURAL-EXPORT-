@@ -16,11 +16,8 @@ This project focuses on analyzing Nigeria's agricultural exports, utilizing a da
 **Evaluate Financial Performance**:
    - To assess the financial metrics associated with Nigeria's agricultural exports, including cost of goods sold (COGS), profit margins, and overall export value.
      
-**Explore Transportation Modes**:
-   - To investigate the different modes of transportation used for exporting agricultural products and their impact on export efficiency and cost.
-     
 **Spot Growth Opportunities**:
-   - To identify potential areas for growth or improvement in Nigeria's agricultural export sector by analyzing trends and performance data.
+   - Monitor and analyze performance trends over time(Montly Basis) 
      
 **Company Performance Analysis**:
    - To evaluate the performance of companies involved in agricultural exports, focusing on their contribution to the overall export value and profitability.
@@ -126,6 +123,21 @@ ORDER BY Year;
 ![](Annual.png)
 ---
 
+**6. Export Performance**
+- Analyzing export trends and performance on a Monthly Basis
+```
+SELECT Product_Name,
+       YEAR(Date) AS Year,
+       MONTH(Date) AS Month,
+       MONTHNAME(Date) AS Month_Name,
+       ROUND(SUM(`Export Value`), 2) AS Total_Export_Value
+FROM credit.nigeria_agricultural_exports
+GROUP BY Product_Name, Year, Month, Month_Name
+ORDER BY Product_Name, Year, Month;
+```
+---
+![](Perfomance_sale.png)
+---
 
 
 
