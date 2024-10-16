@@ -26,7 +26,7 @@ This project focuses on analyzing Nigeria's agricultural exports, utilizing a da
    - To provide actionable insights and recommendations based on the analysis of export trends, financial metrics, and market destinations.
 
 ## Tool
-- MySQL
+- MySQL,Power BI
 
   
 ## About the Data
@@ -274,6 +274,11 @@ ORDER BY Company, Year, Month;
 ```
 ---
 ![](CPT.png)
+---
+
+## DASHBAORD
+---
+![](AGRICC_page-0001.jpg)
 ---
 
 ## FINDINGS AND RECOMMENDATION 
